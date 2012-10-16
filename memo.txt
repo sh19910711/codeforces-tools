@@ -18,3 +18,23 @@ SubmissionInfo
 ・問題IDは大文字じゃなくても良い
 ・データ取り出すときにwww.codeforces.comにアクセスしてるけれど、
 　content_scriptでは、相対パスにしておかないとクロスサイトドメインの制約に引っかかるような気がする
+
+OK: "Accepted"
+REJECTED: "Rejected"
+WRONG_ANSWER: "Wrong answer"
+RUNTIME_ERROR: "Runtime error"
+TIME_LIMIT_EXCEEDED: "Time limit exceeded"
+MEMORY_LIMIT_EXCEEDED: "Memory limit exceeded"
+COMPILATION_ERROR: "Compilation error"
+CHALLENGED: "Hacked"
+FAILED: "Judgement failed"
+PARTIAL: "Partial"
+PRESENTATION_ERROR: "Presentation error"
+IDLENESS_LIMIT_EXCEEDED: "Idleness limit exceeded"
+SECURITY_VIOLATED: "Security violated"
+CRASHED: "Denial of judgement"
+INPUT_PREPARATION_CRASHED: "Input preparation failed"
+SKIPPED: "Skipped"
+TESTING: "Running"
+
+ACかどうかってのは、細かく見るよりAcceptedかどうかを見るだけにとどめたほうが良さそう

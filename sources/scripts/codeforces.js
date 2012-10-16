@@ -12,6 +12,42 @@
 	}
 
 	var Codeforces = {
+		STATUS_ACCEPTED : 0,
+		STATUS_REJECTED : 1,
+		STATUS_WRONG_ANSWER : 2,
+		STATUS_RUNTIME_ERROR : 3,
+		STATUS_TIME_LIMIT_EXCEEDED : 4,
+		STATUS_MEMORY_LIMIT_EXCEEDED : 5,
+		STATUS_COMPILATION_ERROR : 6,
+		STATUS_CHALLENGED : 7,
+		STATUS_FAILED : 8,
+		STATUS_PARTIAL : 9,
+		STATUS_PRESENTATION_ERROR : 10,
+		STATUS_IDLENESS_LIMIT_EXCEEDED : 11,
+		STATUS_SECURITY_VIOLATED : 12,
+		STATUS_CRASHED : 13,
+		STATUS_INPUT_PREPARATION_CRASHED : 14,
+		STATUS_SKIPPED : 15,
+		STATUS_TESTING : 16,
+
+		/**
+		 * StatusをIDに変換する
+		 * 
+		 * @param status_text
+		 * @returns
+		 */
+		get_status_id : function(status_text) {
+			var status_list = [ 'Accepted', 'Rejected', 'Wrong answer', 'Runtime error', 'Time limit exceeded', 'Memory limit exceeded', 'Compilation error',
+					'Hacked', 'Judgement failed', 'Partial', 'Presentation error', 'Idleness limit exceeded', 'Security violated', 'Denial of judgement',
+					'Input preparation failed', 'Skipped', 'Running' ];
+			for ( var i = 0; i < status_list.length; ++i) {
+				if (status_text.indexOf(status_list[i]) !== -1) {
+					return i;
+				}
+			}
+			return false;
+		},
+
 		/**
 		 * URLから問題IDを取得する
 		 * 
@@ -109,6 +145,49 @@
 		},
 
 		/**
+		 * 問題のサンプル出力を取得する
+		 * 
+		 * @param html_text
+		 *            from
+		 *            http://www.codeforces.com/problemset/problem/{contest_id}/{problem_id}
+		 * @returns
+		 */
+		get_example_output_from_html_text : function(html_text) {
+			html_text = do_scraping(html_text);
+			return $('div.sample-test>div.output>pre', html_text).map(function(i, html_element) {
+				return $.trim($(html_element).html().replace(/<br>/ig, '\n'));
+			});
+		},
+
+		/**
+		 * 問題のサンプル出力を取得する
+		 * 
+		 * @param contest_id
+		 * @param problem_id
+		 * @param callback
+		 */
+		get_example_output_with_problem_id : function(contest_id, problem_id, callback) {
+			if (is_invalid_contest_problem(contest_id, problem_id)) {
+				callback(false);
+				return;
+			}
+
+			var url = CODEFORCES_HOST + '/problemset/problem/' + contest_id + '/' + problem_id;
+			$.ajax({
+				type : 'GET',
+				url : url,
+				cache : false,
+				success : ajax_success
+			});
+			function ajax_success(result) {
+				var example_output = Codeforces.get_example_output_from_html_text(result);
+				callback({
+					example_output : example_output
+				});
+			}
+		},
+
+		/**
 		 * 問題のサンプル入力を取得する
 		 * 
 		 * @param html_text
@@ -165,7 +244,7 @@
 		this.user = '';
 		this.problem_id = '';
 		this.language = '';
-		this.status = '';
+		this.status = -1;
 		this.time = '';
 		this.memory = '';
 		this.init.apply(this, arguments);
@@ -194,7 +273,7 @@
 		var user = $.trim(list.eq(2).text());
 		var problem_id = $.trim(Codeforces.get_problem_id_from_url(list.eq(3).children('a').data('href')));
 		var language = $.trim(list.eq(4).text());
-		var status = $.trim(list.eq(5).text());
+		var status = Codeforces.get_status_id($.trim(list.eq(5).text()));
 		var time = $.trim(list.eq(6).text());
 		var memory = $.trim(list.eq(7).text());
 		return new SubmissionInfo(id, date, user, problem_id, language, status, time, memory);

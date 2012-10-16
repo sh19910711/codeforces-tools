@@ -11,6 +11,50 @@
 	})();
 
 	function init() {
+		module('提出情報のVerdict');
+
+		test('対応する数字に変換', function() {
+			var status_list = [ 'Accepted', 'Rejected', 'Wrong answer', 'Runtime error', 'Time limit exceeded', 'Memory limit exceeded', 'Compilation error',
+					'Hacked', 'Judgement failed', 'Partial', 'Presentation error', 'Idleness limit exceeded', 'Security violated', 'Denial of judgement',
+					'Input preparation failed', 'Skipped', 'Running' ];
+			status_list.forEach(function(status, i) {
+				equal(Codeforces.get_status_id(status), i, status);
+			});
+			equal(Codeforces.get_status_id('Wrong answer on test 1'), Codeforces.STATUS_WRONG_ANSWER);
+		});
+
+		module('サンプル出力を取得する: get_example_output_with_problem_id()');
+
+		test('定義されているか', function() {
+			ok(typeof (Codeforces.get_example_output_with_problem_id) !== 'undefined');
+		});
+
+		asyncTest('ちゃんと取得できているか, contest_id = 233', function() {
+			Codeforces.get_example_output_with_problem_id(233, 'A', function(ret) {
+				start();
+				ok(ret !== false);
+				var example_output = ret.example_output;
+				ok(example_output !== false);
+				var expected = [ '-1', '2 1', '2 1 4 3' ];
+				for ( var i = 0; i < expected.length; ++i) {
+					equal(example_output[i], expected[i]);
+				}
+			});
+		});
+
+		asyncTest('ちゃんと取得できているか, contest_id = 1', function() {
+			Codeforces.get_example_output_with_problem_id(1, 'B', function(ret) {
+				start();
+				ok(ret !== false);
+				var example_output = ret.example_output;
+				ok(example_output !== false);
+				var expected = [ 'BC23\nR23C55' ];
+				for ( var i = 0; i < expected.length; ++i) {
+					equal(example_output[i], expected[i]);
+				}
+			});
+		});
+
 		module('サンプル入力を取得する: get_example_input_with_problem_id()');
 
 		test('定義されているか', function() {
@@ -23,9 +67,10 @@
 				ok(ret !== false);
 				var example_input = ret.example_input;
 				ok(example_input !== false);
-				equal(example_input[0], '1');
-				equal(example_input[1], '2');
-				equal(example_input[2], '4');
+				var expected = [ '1', '2', '4' ];
+				for ( var i = 0; i < expected.length; ++i) {
+					equal(example_input[i], expected[i]);
+				}
 			});
 		});
 
@@ -35,7 +80,10 @@
 				ok(ret !== false);
 				var example_input = ret.example_input;
 				ok(example_input !== false);
-				equal(example_input[0], '2\nR23C55\nBC23');
+				var expected = [ '2\nR23C55\nBC23' ];
+				for ( var i = 0; i < expected.length; ++i) {
+					equal(example_input[i], expected[i]);
+				}
 			});
 		});
 
