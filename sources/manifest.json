@@ -1,0 +1,18 @@
+{
+	"name": "Codeforces Tool",
+	"version": "0.0.0",
+	"manifest_version": 2,
+	"permissions": ["tabs", "contextMenus", "clipboardWrite", "notifications"],
+	"description": "",
+	"icons": {
+		"16": "images/icon_16.png",
+		"48": "images/icon_48.png",
+		"64": "images/icon_64.png",
+		"128": "images/icon_128.png",
+		"200": "images/icon_200.png"
+	},
+	"content_scripts": [{
+		"matches": ["*://www.codeforces.com/*","*://www.codeforces.ru/*","*://codeforces.com/*","*://codeforces.ru/*"],
+		"js": ["scripts/jquery.js", "scripts/content_script.js", "scripts/codeforces.js"]
+	}]
+}
