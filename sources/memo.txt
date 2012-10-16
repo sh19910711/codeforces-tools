@@ -3,3 +3,13 @@ contest scriptからなら、そのドメイン内のファイルにアクセス
 content scriptを実行した段階で入出力をコピーしておき
 backgroundに送信。
 background側ではタブIDとその入出力を対応付けて記録する。
+
+SubmissionInfo
+	Submission ID
+	Date
+	User
+	Problem ID
+	Language
+	Status
+	Time
+	Memory
