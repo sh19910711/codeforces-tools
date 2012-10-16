@@ -13,3 +13,5 @@ SubmissionInfo
 	Status
 	Time
 	Memory
+	
+問題IDは大文字じゃなくても良い

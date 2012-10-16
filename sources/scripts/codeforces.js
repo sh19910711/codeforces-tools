@@ -3,8 +3,8 @@
 //  this library needs jQuery
 //
 (function(window, namespace, undefined) {
-	var REGEXP_PROBLEMSET_PROBLEM = /^[^:]+:\/\/[^\/]+\/problemset\/problem\/([0-9]+)\/([A-Z]+)\/?$/;
-	var REGEXP_CONTEST_PROBLEM = /^[^:]+:\/\/[^\/]+\/contest\/([0-9]+)\/problem\/([A-Z]+)\/?$/;
+	var REGEXP_PROBLEMSET_PROBLEM = /^[^:]+:\/\/[^\/]+\/problemset\/problem\/([0-9]+)\/([A-Za-z]+)\/?$/;
+	var REGEXP_CONTEST_PROBLEM = /^[^:]+:\/\/[^\/]+\/contest\/([0-9]+)\/problem\/([A-Za-z]+)\/?$/;
 
 	var Codeforces = {
 		/**
@@ -18,9 +18,9 @@
 			}
 
 			if (REGEXP_PROBLEMSET_PROBLEM.test(url)) {
-				return url.match(REGEXP_PROBLEMSET_PROBLEM)[2];
+				return url.match(REGEXP_PROBLEMSET_PROBLEM)[2].toUpperCase();
 			} else if (REGEXP_CONTEST_PROBLEM.test(url)) {
-				return url.match(REGEXP_CONTEST_PROBLEM)[2];
+				return url.match(REGEXP_CONTEST_PROBLEM)[2].toUpperCase();
 			}
 
 			return false;
@@ -87,6 +87,7 @@
 				callback(false);
 				return;
 			}
+
 			var url = 'http://www.codeforces.com/contest/' + contest_id + '/my';
 			$.ajax({
 				type : 'GET',
@@ -100,6 +101,14 @@
 					submissions : submissions
 				});
 			}
+		},
+
+		/**
+		 * 問題のサンプル入力を取得する
+		 * @param problem_id
+		 * @param callback
+		 */
+		get_example_input_with_problem_id : function(problem_id, callback) {
 		}
 	};
 

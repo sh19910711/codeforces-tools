@@ -29,7 +29,6 @@
 			Codeforces.get_submissions_with_contest_id(135, function(ret) {
 				start();
 				var submissions = ret.submissions;
-				console.log(submissions);
 				ok(submissions !== false);
 			});
 		});
@@ -62,7 +61,8 @@
 					'http://codeforces.com/contest/135/problem/A/', 'http://codeforces.com/contest/135/problem/A',
 					'http://codeforces.com/contest/135/problem/B', 'http://codeforces.com/contest/135/problem/C/',
 					'http://codeforces.com/contest/135/problem/D', 'http://codeforces.com/contest/135/problem/E/',
-					'http://codeforces.com/problemset/problem/233/A/', 'http://codeforces.com/problemset/problem/1/B' ];
+					'http://codeforces.com/problemset/problem/233/A/', 'http://codeforces.com/problemset/problem/1/B',
+					'http://codeforces.com/problemset/problem/233/a/', 'http://codeforces.com/problemset/problem/1/b' ];
 			url_list.forEach(function(url) {
 				ok(Codeforces.is_problem_page_url(url) === true, '正常なURL: ' + url);
 			});
@@ -201,6 +201,12 @@
 				expect : 'A'
 			}, {
 				url : 'http://codeforces.com/problemset/problem/1/B',
+				expect : 'B'
+			}, {
+				url : 'http://codeforces.com/problemset/problem/233/a/',
+				expect : 'A'
+			}, {
+				url : 'http://codeforces.com/problemset/problem/1/b',
 				expect : 'B'
 			} ];
 			test_cases.forEach(function(test_case) {
