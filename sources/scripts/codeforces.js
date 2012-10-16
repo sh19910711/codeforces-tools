@@ -83,7 +83,7 @@
 		 *            function({submissions})
 		 */
 		get_submissions_with_contest_id : function(contest_id, callback) {
-			if (typeof (contest_id) !== 'Number') {
+			if (typeof (contest_id) !== 'number') {
 				callback(false);
 				return;
 			}
