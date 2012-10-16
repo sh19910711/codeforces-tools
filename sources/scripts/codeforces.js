@@ -4,9 +4,7 @@
 (function(window, namespace, undefined) {
 	var REGEXP_PROBLEMSET_PROBLEM = /^[^:]+:\/\/[^\/]+\/problemset\/problem\/([0-9]+)\/([A-Z]+)\/?$/;
 	var REGEXP_CONTEST_PROBLEM = /^[^:]+:\/\/[^\/]+\/contest\/([0-9]+)\/problem\/([A-Z]+)\/?$/;
-	var self = {};
-
-	self = window[namespace] = {
+	var self = {
 		/**
 		 * URLから問題IDを取得する
 		 * 
@@ -61,4 +59,5 @@
 			return false;
 		}
 	};
+	window[namespace] = self;
 })(this, 'Codeforces');
