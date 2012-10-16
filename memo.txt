@@ -13,5 +13,8 @@ SubmissionInfo
 	Status
 	Time
 	Memory
-	
-問題IDは大文字じゃなくても良い
+
+メモ	
+・問題IDは大文字じゃなくても良い
+・データ取り出すときにwww.codeforces.comにアクセスしてるけれど、
+　content_scriptでは、相対パスにしておかないとクロスサイトドメインの制約に引っかかるような気がする

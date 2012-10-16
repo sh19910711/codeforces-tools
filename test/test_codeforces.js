@@ -11,6 +11,34 @@
 	})();
 
 	function init() {
+		module('サンプル入力を取得する: get_example_input_with_problem_id()');
+
+		test('定義されているか', function() {
+			ok(typeof (Codeforces.get_example_input_with_problem_id) !== 'undefined');
+		});
+
+		asyncTest('ちゃんと取得できているか, contest_id = 233', function() {
+			Codeforces.get_example_input_with_problem_id(233, 'A', function(ret) {
+				start();
+				ok(ret !== false);
+				var example_input = ret.example_input;
+				ok(example_input !== false);
+				equal(example_input[0], '1');
+				equal(example_input[1], '2');
+				equal(example_input[2], '4');
+			});
+		});
+
+		asyncTest('ちゃんと取得できているか, contest_id = 1', function() {
+			Codeforces.get_example_input_with_problem_id(1, 'B', function(ret) {
+				start();
+				ok(ret !== false);
+				var example_input = ret.example_input;
+				ok(example_input !== false);
+				equal(example_input[0], '2\nR23C55\nBC23');
+			});
+		});
+
 		module('提出情報取得関連: get_submissions_with_contest_id()');
 
 		test('定義されているか', function() {
@@ -20,6 +48,7 @@
 		asyncTest('ちゃんと取得できているか  contest_id = 1', function() {
 			Codeforces.get_submissions_with_contest_id(1, function(ret) {
 				start();
+				ok(ret !== false);
 				var submissions = ret.submissions;
 				ok(submissions !== false);
 			});

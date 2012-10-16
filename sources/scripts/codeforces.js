@@ -5,6 +5,11 @@
 (function(window, namespace, undefined) {
 	var REGEXP_PROBLEMSET_PROBLEM = /^[^:]+:\/\/[^\/]+\/problemset\/problem\/([0-9]+)\/([A-Za-z]+)\/?$/;
 	var REGEXP_CONTEST_PROBLEM = /^[^:]+:\/\/[^\/]+\/contest\/([0-9]+)\/problem\/([A-Za-z]+)\/?$/;
+	var CODEFORCES_HOST = 'http://www.codeforces.com';
+
+	if (/^https?:\/\/[^\.]*\.?codeforces\.(com|ru)/.test(location.href)) {
+		CODEFORCES_HOST = location.href.match(/^https?:\/\/[^\.]*\.?codeforces\.(com|ru)/)[0];
+	}
 
 	var Codeforces = {
 		/**
@@ -58,7 +63,7 @@
 		 * 与えられたHTMLデータから提出情報を取り出す
 		 * 
 		 * @param html_text
-		 *            from http://www.codeforces.com/contest/{contest_id}/my
+		 *            from /contest/{contest_id}/my
 		 */
 		get_submissions_from_html : function(html_text) {
 
@@ -88,7 +93,7 @@
 				return;
 			}
 
-			var url = 'http://www.codeforces.com/contest/' + contest_id + '/my';
+			var url = CODEFORCES_HOST + '/contest/' + contest_id + '/my';
 			$.ajax({
 				type : 'GET',
 				url : url,
@@ -105,12 +110,51 @@
 
 		/**
 		 * 問題のサンプル入力を取得する
+		 * 
+		 * @param html_text
+		 *            from
+		 *            http://www.codeforces.com/problemset/problem/{contest_id}/{problem_id}
+		 * @returns
+		 */
+		get_example_input_from_html_text : function(html_text) {
+			html_text = do_scraping(html_text);
+			return $('div.sample-test>div.input>pre', html_text).map(function(i, html_element) {
+				return $.trim($(html_element).html().replace(/<br>/ig, '\n'));
+			});
+		},
+
+		/**
+		 * 問題のサンプル入力を取得する
+		 * 
+		 * @param contest_id
 		 * @param problem_id
 		 * @param callback
 		 */
-		get_example_input_with_problem_id : function(problem_id, callback) {
+		get_example_input_with_problem_id : function(contest_id, problem_id, callback) {
+			if (is_invalid_contest_problem(contest_id, problem_id)) {
+				callback(false);
+				return;
+			}
+
+			var url = CODEFORCES_HOST + '/problemset/problem/' + contest_id + '/' + problem_id;
+			$.ajax({
+				type : 'GET',
+				url : url,
+				cache : false,
+				success : ajax_success
+			});
+			function ajax_success(result) {
+				var example_input = Codeforces.get_example_input_from_html_text(result);
+				callback({
+					example_input : example_input
+				});
+			}
 		}
 	};
+
+	function is_invalid_contest_problem(contest_id, problem_id) {
+		return (typeof (contest_id) !== 'number') || (/[^A-Za-z0-9]/.test(problem_id));
+	}
 
 	/**
 	 * 提出情報を扱う
