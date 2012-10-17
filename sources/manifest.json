@@ -1,5 +1,5 @@
 {
-	"name": "Codeforces Tool",
+	"name": "Codeforces Tools",
 	"version": "0.0.0",
 	"manifest_version": 2,
 	"permissions": ["tabs", "contextMenus", "clipboardWrite", "notifications"],
@@ -14,5 +14,14 @@
 	"content_scripts": [{
 		"matches": ["*://www.codeforces.com/*","*://www.codeforces.ru/*","*://codeforces.com/*","*://codeforces.ru/*"],
 		"js": ["scripts/jquery.js", "scripts/content_script.js", "scripts/codeforces.js"]
-	}]
+	}],
+	"background": {
+		"page": "background.html",
+		"persistent": false
+	},
+	"page_action": {
+	    "default_icon": "images/icon_16.png",
+	    "default_title": "Codeforces Tool",
+	    "default_popup": "page_action.html"
+  	}
 }

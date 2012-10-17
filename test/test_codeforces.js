@@ -23,66 +23,75 @@
 			equal(Codeforces.get_status_id('Wrong answer on test 1'), Codeforces.STATUS_WRONG_ANSWER);
 		});
 
-		module('サンプル出力を取得する: get_example_output_with_problem_id()');
+		test('対応するテキストに変換', function() {
+			var status_list = [ 'Accepted', 'Rejected', 'Wrong answer', 'Runtime error', 'Time limit exceeded', 'Memory limit exceeded', 'Compilation error',
+					'Hacked', 'Judgement failed', 'Partial', 'Presentation error', 'Idleness limit exceeded', 'Security violated', 'Denial of judgement',
+					'Input preparation failed', 'Skipped', 'Running' ];
+			status_list.forEach(function(status, i) {
+				equal(Codeforces.get_status_text(i), status, status);
+			});
+		});
+
+		module('サンプル出力を取得する: get_sample_output_with_problem_id()');
 
 		test('定義されているか', function() {
-			ok(typeof (Codeforces.get_example_output_with_problem_id) !== 'undefined');
+			ok(typeof (Codeforces.get_sample_output_with_problem_id) !== 'undefined');
 		});
 
 		asyncTest('ちゃんと取得できているか, contest_id = 233', function() {
-			Codeforces.get_example_output_with_problem_id(233, 'A', function(ret) {
+			Codeforces.get_sample_output_with_problem_id(233, 'A', function(ret) {
 				start();
 				ok(ret !== false);
-				var example_output = ret.example_output;
-				ok(example_output !== false);
+				var sample_output = ret.sample_output;
+				ok(sample_output !== false);
 				var expected = [ '-1', '2 1', '2 1 4 3' ];
 				for ( var i = 0; i < expected.length; ++i) {
-					equal(example_output[i], expected[i]);
+					equal(sample_output[i], expected[i]);
 				}
 			});
 		});
 
 		asyncTest('ちゃんと取得できているか, contest_id = 1', function() {
-			Codeforces.get_example_output_with_problem_id(1, 'B', function(ret) {
+			Codeforces.get_sample_output_with_problem_id(1, 'B', function(ret) {
 				start();
 				ok(ret !== false);
-				var example_output = ret.example_output;
-				ok(example_output !== false);
+				var sample_output = ret.sample_output;
+				ok(sample_output !== false);
 				var expected = [ 'BC23\nR23C55' ];
 				for ( var i = 0; i < expected.length; ++i) {
-					equal(example_output[i], expected[i]);
+					equal(sample_output[i], expected[i]);
 				}
 			});
 		});
 
-		module('サンプル入力を取得する: get_example_input_with_problem_id()');
+		module('サンプル入力を取得する: get_sample_input_with_problem_id()');
 
 		test('定義されているか', function() {
-			ok(typeof (Codeforces.get_example_input_with_problem_id) !== 'undefined');
+			ok(typeof (Codeforces.get_sample_input_with_problem_id) !== 'undefined');
 		});
 
 		asyncTest('ちゃんと取得できているか, contest_id = 233', function() {
-			Codeforces.get_example_input_with_problem_id(233, 'A', function(ret) {
+			Codeforces.get_sample_input_with_problem_id(233, 'A', function(ret) {
 				start();
 				ok(ret !== false);
-				var example_input = ret.example_input;
-				ok(example_input !== false);
+				var sample_input = ret.sample_input;
+				ok(sample_input !== false);
 				var expected = [ '1', '2', '4' ];
 				for ( var i = 0; i < expected.length; ++i) {
-					equal(example_input[i], expected[i]);
+					equal(sample_input[i], expected[i]);
 				}
 			});
 		});
 
 		asyncTest('ちゃんと取得できているか, contest_id = 1', function() {
-			Codeforces.get_example_input_with_problem_id(1, 'B', function(ret) {
+			Codeforces.get_sample_input_with_problem_id(1, 'B', function(ret) {
 				start();
 				ok(ret !== false);
-				var example_input = ret.example_input;
-				ok(example_input !== false);
+				var sample_input = ret.sample_input;
+				ok(sample_input !== false);
 				var expected = [ '2\nR23C55\nBC23' ];
 				for ( var i = 0; i < expected.length; ++i) {
-					equal(example_input[i], expected[i]);
+					equal(sample_input[i], expected[i]);
 				}
 			});
 		});
@@ -139,7 +148,9 @@
 					'http://codeforces.com/contest/135/problem/B', 'http://codeforces.com/contest/135/problem/C/',
 					'http://codeforces.com/contest/135/problem/D', 'http://codeforces.com/contest/135/problem/E/',
 					'http://codeforces.com/problemset/problem/233/A/', 'http://codeforces.com/problemset/problem/1/B',
-					'http://codeforces.com/problemset/problem/233/a/', 'http://codeforces.com/problemset/problem/1/b' ];
+					'http://codeforces.com/problemset/problem/233/a/', 'http://codeforces.com/problemset/problem/1/b',
+					'http://codeforces.com/problemset/problem/233/A/?test', 'http://codeforces.com/problemset/problem/1/B?foo',
+					'http://codeforces.com/problemset/problem/233/a/#bar', 'http://codeforces.com/problemset/problem/1/b?foo' ];
 			url_list.forEach(function(url) {
 				ok(Codeforces.is_problem_page_url(url) === true, '正常なURL: ' + url);
 			});
@@ -284,6 +295,18 @@
 				expect : 'A'
 			}, {
 				url : 'http://codeforces.com/problemset/problem/1/b',
+				expect : 'B'
+			}, {
+				url : 'http://codeforces.com/problemset/problem/233/A/?test',
+				expect : 'A'
+			}, {
+				url : 'http://codeforces.com/problemset/problem/1/B?foo',
+				expect : 'B'
+			}, {
+				url : 'http://codeforces.com/problemset/problem/233/a/#bar',
+				expect : 'A'
+			}, {
+				url : 'http://codeforces.com/problemset/problem/1/b?foo',
 				expect : 'B'
 			} ];
 			test_cases.forEach(function(test_case) {

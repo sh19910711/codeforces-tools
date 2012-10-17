@@ -38,3 +38,7 @@ SKIPPED: "Skipped"
 TESTING: "Running"
 
 ACかどうかってのは、細かく見るよりAcceptedかどうかを見るだけにとどめたほうが良さそう
+
+content_script.jsは提出状況とサンプル入出力の取得だけを行う
+
+ログインしてないときの処理

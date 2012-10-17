@@ -1,0 +1,158 @@
+@import url(http://fonts.googleapis.com/css?family=Nunito:300,400);
+
+body {
+	min-width: 320px;
+	min-height: 120px;
+}
+
+body {
+	font-family: Nunito;
+	font-weight: 300;
+	color: rgba(51, 51, 51, 0.75);
+	padding-bottom: 48px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	margin: 0;
+	padding: 0;
+}
+
+.subject {
+	font-size: 32px;
+	font-weight: 300;
+	line-height: 72px;
+}
+
+#status {
+	font-size: 11px;
+	font-family: verdana, arial, sans-serif;
+}
+
+.info .gray {
+	color: rgba(51,51,51,0.5);
+}
+
+.text .accepted {
+	color: rgba(0, 153, 0, 0.75);
+	font-weight: bold;
+}
+
+.text .rejected {
+	color: rgba(0, 0, 153, 0.75);
+}
+
+#submissions .text:after {
+	content: ' ';
+	clear: both;
+	display: block;
+}
+
+.submission-status {
+	float: left;
+	display: inline-block;
+	box-sizing: border-box;
+	width: 20px;
+	height: 20px;
+	border: 1px solid rgba(153, 153, 153, 0.5);
+	background: -webkit-gradient(linear, left top, left bottom, to(rgba(102, 102, 102,
+		0.75) ), from(rgba(51, 51, 51, 0.3) ) );
+	margin-right: 3px;
+	margin-bottom: 3px;
+	cursor: pointer;
+	display: inline-block;
+	border-radius: 2px;
+}
+
+.submission-status:hover {
+	background: rgba(102, 102, 102, 0.75);
+}
+
+.submission-status.accepted {
+	background: -webkit-gradient(linear, left top, left bottom, to(rgba(0, 204, 0, 0.75)
+		), from(rgba(51, 255, 0, 0.3) ) );
+}
+
+.submission-status.accepted:hover {
+	background: rgba(0, 204, 0, 0.75);
+}
+
+.submission-status.rejected {
+	
+}
+
+.submission-status.wrong-answer {
+	background: -webkit-gradient(linear, left top, left bottom, to(rgba(0, 0, 204, 0.65)
+		), from(rgba(0, 51, 204, 0.3) ) );
+}
+
+.submission-status.wrong-answer:hover {
+	background: rgba(0, 0, 204, 0.65);
+}
+
+.submission-status.runtime-error {
+	
+}
+
+.submission-status.time-limit-exceeded {
+	
+}
+
+.submission-status.memory-limit-exceeded {
+	
+}
+
+.submission-status.compilation-error {
+	
+}
+
+.submission-status.hacked {
+	
+}
+
+.submission-status.judgement-failed {
+	
+}
+
+.submission-status.partial {
+	
+}
+
+.submission-status.presentation-error {
+	
+}
+
+.submission-status.idleness-limit-exceeded {
+	
+}
+
+.submission-status.security-violated {
+	
+}
+
+.submission-status.denial-of-judgement {
+	
+}
+
+.submission-status.input-preparation-failed {
+	
+}
+
+.submission-status.skipped {
+	
+}
+
+.submission-status.running {
+	
+}
+
+#footer {
+	position: fixed;
+	bottom: 6px;
+	left: 6px;
+	color: rgba(153, 153, 153, 0.75);
+	font-size: 12px;
+}
+
+#footer * {
+	color: rgba(153, 153, 153, 0.75);
+}
