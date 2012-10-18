@@ -43,6 +43,7 @@
 			type : 'set sample io',
 			info : {
 				contest_id : contest_id,
+				problem_id : problem_id,
 				sample_input : sample_input,
 				sample_output : sample_output
 			}

@@ -8,7 +8,9 @@ $(function() {
 	var last_send_response = undefined;
 	var submissions_list = [];
 	var solved_info_list = []; // 0: Accepted, 1: Rejected, 2: No Submission
+	var sample_io_list = [];
 	var waited_request = undefined;
+	var clipboard_buffer = undefined;
 
 	/**
 	 * 角丸の矩形を描画する
@@ -85,13 +87,16 @@ $(function() {
 	/**
 	 * 現在選択されているタブのURLを取得する
 	 */
-	function set_current_url(tab_id) {
-		chrome.tabs.get(tab_id, function(tab) {
+	function set_current_url(tab_id, callback) {
+		chrome.tabs.getSelected(function(tab) {
 			current_url = tab.url;
 			if (Codeforces.is_problem_page_url(current_url)) {
 				current_contest_id = Codeforces.get_contest_id_from_url(current_url);
 				current_problem_id = Codeforces.get_problem_id_from_url(current_url);
 				current_problem_key = current_contest_id + ',' + current_problem_id;
+			}
+			if (callback instanceof Function) {
+				callback();
 			}
 		});
 	}
@@ -101,43 +106,67 @@ $(function() {
 	 */
 	function update_waited_request() {
 		if (waited_request instanceof Function) {
-			chrome.tabs.get(tab_id, function(tab) {
-				current_url = tab.url;
-				if (Codeforces.is_problem_page_url(current_url)) {
-					current_contest_id = Codeforces.get_contest_id_from_url(current_url);
-					current_problem_id = Codeforces.get_problem_id_from_url(current_url);
-					current_problem_key = current_contest_id + ',' + current_problem_id;
-					var submissions = submissions_list[current_contest_id].filter(function(submission) {
-						return submission.problem_id === current_problem_id;
+			if (Codeforces.is_problem_page_url(current_url)) {
+				current_contest_id = Codeforces.get_contest_id_from_url(current_url);
+				current_problem_id = Codeforces.get_problem_id_from_url(current_url);
+				current_problem_key = current_contest_id + ',' + current_problem_id;
+				var submissions = submissions_list[current_contest_id].filter(function(submission) {
+					return submission.problem_id === current_problem_id;
+				});
+				try {
+					waited_request({
+						success : true,
+						submissions : submissions,
+						contest_id : current_contest_id,
+						problem_id : current_problem_id
 					});
-					try {
-						waited_request({
-							success : true,
-							submissions : submissions,
-							contest_id : current_contest_id,
-							problem_id : current_problem_id
-						});
-					} catch (e) {
-						waited_request = undefined;
-					}
+				} catch (e) {
 					waited_request = undefined;
 				}
-			});
+				waited_request = undefined;
+			}
 		}
+	}
+
+	function set_context_menu() {
+		chrome.contextMenus.removeAll();
+		if (!Codeforces.is_problem_page_url(current_url)) {
+			return;
+		}
+		chrome.contextMenus.create({
+			title : 'Copy All Sample Input to clipboard',
+			contexts : [ 'page', 'selection' ],
+			id : 'copy_sample_input',
+			onclick : function() {
+				var data = sample_io_list[current_problem_key].sample_input.join('\n');
+				copy_to_clipboard(data);
+			}
+		});
+		chrome.contextMenus.create({
+			title : 'Copy All Sample Output to clipboard',
+			contexts : [ 'page', 'selection' ],
+			id : 'copy_sample_output',
+			onclick : function() {
+				var data = sample_io_list[current_problem_key].sample_output.join('\n');
+				copy_to_clipboard(data);
+			}
+		});
 	}
 
 	/**
 	 * タブが選択されたり更新されたときに実行される関数
 	 */
 	function set_tab(tab_id) {
-		if (!login_flag) {
-			chrome.pageAction.hide(tab_id);
-		} else {
-			current_tab_id = tab_id;
-			set_page_action_icon(tab_id);
-			set_current_url(tab_id);
-			update_waited_request();
-		}
+		set_current_url(tab_id, function() {
+			if (!login_flag) {
+				chrome.pageAction.hide(tab_id);
+			} else {
+				current_tab_id = tab_id;
+				set_page_action_icon(tab_id);
+				update_waited_request();
+			}
+			set_context_menu();
+		});
 	}
 
 	/**
@@ -185,7 +214,6 @@ $(function() {
 			return accepted ? 0 : 1;
 		})();
 
-		console.log('solved info', tab_id, solved_info_list[tab_id]);
 		submissions_list[contest_id] = submissions;
 		// TODO: page actionなどデータの更新を待ってる人にお返事を出す
 		set_tab(tab_id);
@@ -200,6 +228,7 @@ $(function() {
 	function get_submissions(info, send_response) {
 		if (typeof (submissions_list[current_contest_id]) === 'undefined') {
 			// データが更新されるのを待つ
+			waited_request = send_response;
 		} else {
 			// 現在の問題IDに一致するものだけを返す
 			var submissions = submissions_list[current_contest_id].filter(function(submission) {
@@ -222,7 +251,15 @@ $(function() {
 	 * サンプル入出力の設定
 	 */
 	function set_sample_io(info, send_response) {
-		// TODO: 実装
+		var problem_key = info.contest_id + ',' + info.problem_id;
+		var sample_input = info.sample_input;
+		var sample_output = info.sample_output;
+
+		sample_io_list[problem_key] = {
+			sample_input : sample_input,
+			sample_output : sample_output
+		};
+
 		send_response({
 			success : true
 		});
@@ -254,10 +291,18 @@ $(function() {
 		return true;
 	}
 
+	function copy_to_clipboard(data) {
+		$('#clipboard_buffer').empty().text(data);
+		$('#clipboard_buffer')[0].select();
+		document.execCommand('copy');
+	}
+
 	/**
 	 * イベントとかを設定する
 	 */
 	$(window).on('load', function() {
+		$('body').empty().append('<textarea id="clipboard_buffer"></textarea>');
+		clipboard_buffer = $('#clipboard_buffer');
 		chrome.tabs.onHighlighted.addListener(after_tab_highlight);
 		chrome.tabs.onUpdated.addListener(after_tab_updated);
 		chrome.extension.onMessage.addListener(do_check_message);

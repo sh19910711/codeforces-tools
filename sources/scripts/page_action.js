@@ -13,7 +13,6 @@ $(function() {
 			chrome.extension.sendMessage({
 				type : 'wait submissions',
 			}, function(ret) {
-				console.log('hoge, ', ret);
 				set_html();
 				set_event();
 
@@ -89,7 +88,6 @@ $(function() {
 		function set_submissions_event() {
 			var info_text = $('#submissions .info .text');
 			$('#submissions').on('click', '.submission-status', function() {
-				console.log('clicked: ', $(this));
 				open_submission_page(current_contest_id, $(this).data('id'));
 			});
 			$('#submissions').on('mouseenter', '.submission-status', function() {

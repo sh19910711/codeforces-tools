@@ -1,9 +1,10 @@
 {
 	"name": "Codeforces Tools",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"manifest_version": 2,
+	"homepage_url": "https://chrome.google.com/webstore/detail/codeforces-tools/djhdjibchilkplcdkmkmjlefdngiaold",
 	"permissions": ["tabs", "contextMenus", "clipboardWrite", "notifications"],
-	"description": "",
+	"description": "for Codeforces (Unofficial)",
 	"icons": {
 		"16": "images/icon_16.png",
 		"48": "images/icon_48.png",
@@ -16,8 +17,7 @@
 		"js": ["scripts/jquery.js", "scripts/content_script.js", "scripts/codeforces.js"]
 	}],
 	"background": {
-		"page": "background.html",
-		"persistent": false
+		"page": "background.html"
 	},
 	"page_action": {
 	    "default_icon": "images/icon_16.png",

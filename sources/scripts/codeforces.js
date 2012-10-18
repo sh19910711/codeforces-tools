@@ -320,7 +320,6 @@
 		var date = $.trim(list.eq(1).text());
 		var user = $.trim(list.eq(2).text());
 		var problem_url = list.eq(3).children('a').data('href') || list.eq(3).children('a').attr('href');
-		console.log();
 		var problem_id = $.trim(Codeforces.get_problem_id_from_url(problem_url));
 		var language = $.trim(list.eq(4).text());
 		var status = Codeforces.get_status_id($.trim(list.eq(5).text()));
