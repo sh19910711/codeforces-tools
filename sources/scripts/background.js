@@ -136,7 +136,6 @@ $(function() {
 		chrome.contextMenus.create({
 			title : 'Copy All Sample Input to clipboard',
 			contexts : [ 'page', 'selection' ],
-			id : 'copy_sample_input',
 			onclick : function() {
 				var data = sample_io_list[current_problem_key].sample_input.join('\n');
 				copy_to_clipboard(data);
@@ -145,7 +144,6 @@ $(function() {
 		chrome.contextMenus.create({
 			title : 'Copy All Sample Output to clipboard',
 			contexts : [ 'page', 'selection' ],
-			id : 'copy_sample_output',
 			onclick : function() {
 				var data = sample_io_list[current_problem_key].sample_output.join('\n');
 				copy_to_clipboard(data);
@@ -305,6 +303,6 @@ $(function() {
 		clipboard_buffer = $('#clipboard_buffer');
 		chrome.tabs.onHighlighted.addListener(after_tab_highlight);
 		chrome.tabs.onUpdated.addListener(after_tab_updated);
-		chrome.extension.onMessage.addListener(do_check_message);
+		chrome.extension.onRequest.addListener(do_check_message);
 	});
 });

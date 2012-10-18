@@ -10,7 +10,7 @@ $(function() {
 		set_event();
 
 		function generate_wait_submissions() {
-			chrome.extension.sendMessage({
+			chrome.extension.sendRequest({
 				type : 'wait submissions',
 			}, function(ret) {
 				set_html();
@@ -33,7 +33,7 @@ $(function() {
 		}
 
 		// 表示すべきデータをもらいに行く
-		chrome.extension.sendMessage({
+		chrome.extension.sendRequest({
 			type : 'get submissions'
 		}, function(ret) {
 			// 無ければ待つ、あったら更新してさらに新しいデータが届くのを待つ

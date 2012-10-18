@@ -25,7 +25,7 @@
 				login_flag = true;
 			}
 		});
-		chrome.extension.sendMessage({
+		chrome.extension.sendRequest({
 			type : 'set login flag',
 			info : {
 				login_flag : login_flag
@@ -39,7 +39,7 @@
 	function get_problem_info(contest_id, problem_id, after_callback) {
 		var sample_input = Codeforces.get_sample_input_from_html_text(document.body.innerHTML);
 		var sample_output = Codeforces.get_sample_output_from_html_text(document.body.innerHTML);
-		chrome.extension.sendMessage({
+		chrome.extension.sendRequest({
 			type : 'set sample io',
 			info : {
 				contest_id : contest_id,
@@ -58,7 +58,7 @@
 			}
 			var submissions = ret.submissions;
 			// 取得後はbackgroundにデータを送る
-			chrome.extension.sendMessage({
+			chrome.extension.sendRequest({
 				type : 'set submissions',
 				info : {
 					contest_id : contest_id,
