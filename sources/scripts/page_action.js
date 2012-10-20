@@ -5,6 +5,7 @@ $(function() {
 		var current_contest_id; // 表示している問題のコンテストID
 		var current_problem_id; // 表示している問題のID
 		var current_submissions = [];
+		var current_url_prefix = 'http://www.codeforces.com';
 
 		set_html();
 		set_event();
@@ -26,6 +27,7 @@ $(function() {
 					set_submissions_event();
 					current_contest_id = ret.contest_id;
 					current_problem_id = ret.problem_id;
+					current_url_prefix = ret.url_prefix;
 				}
 
 				generate_wait_submissions();
@@ -46,6 +48,7 @@ $(function() {
 				set_submissions_event();
 				current_contest_id = ret.contest_id;
 				current_problem_id = ret.problem_id;
+				current_url_prefix = ret.url_prefix;
 			}
 			generate_wait_submissions();
 		});
@@ -78,7 +81,8 @@ $(function() {
 		 */
 		function open_submission_page(contest_id, submission_id) {
 			// http://www.codeforces.com/contest/{contest_id}/submission/{submission_id}
-			var url = 'http://www.codeforces.com/contest/' + current_contest_id + '/submission/' + submission_id;
+			var url = current_url_prefix + '/contest/' + current_contest_id + '/submission/' + submission_id;
+			console.log(current_url_prefix);
 			window.open(url);
 		}
 

@@ -2,6 +2,8 @@ $(function() {
 	var login_flag = false;
 	var current_tab_id = 0;
 	var current_url = '';
+	var current_url_prefix = '';
+	var current_host = '';
 	var current_contest_id = '';
 	var current_problem_id = '';
 	var current_problem_key = '';
@@ -90,6 +92,7 @@ $(function() {
 	function set_current_url(tab_id, callback) {
 		chrome.tabs.getSelected(function(tab) {
 			current_url = tab.url;
+			current_url_prefix = Utils.get_url_prefix(current_url);
 			if (Codeforces.is_problem_page_url(current_url)) {
 				current_contest_id = Codeforces.get_contest_id_from_url(current_url);
 				current_problem_id = Codeforces.get_problem_id_from_url(current_url);
@@ -124,7 +127,8 @@ $(function() {
 						success : true,
 						submissions : submissions,
 						contest_id : current_contest_id,
-						problem_id : current_problem_id
+						problem_id : current_problem_id,
+						url_prefix : current_url_prefix
 					});
 				} catch (e) {
 					waited_request = undefined;
@@ -280,7 +284,8 @@ $(function() {
 				success : true,
 				submissions : submissions,
 				contest_id : current_contest_id,
-				problem_id : current_problem_id
+				problem_id : current_problem_id,
+				url_prefix : current_url_prefix
 			});
 		}
 	}
