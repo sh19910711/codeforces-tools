@@ -1,6 +1,6 @@
 {
 	"name": "Codeforces Tools",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"manifest_version": 2,
 	"homepage_url": "https://chrome.google.com/webstore/detail/codeforces-tools/djhdjibchilkplcdkmkmjlefdngiaold",
 	"permissions": ["tabs", "contextMenus", "clipboardWrite", "notifications"],

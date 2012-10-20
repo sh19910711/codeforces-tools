@@ -55,7 +55,7 @@ $(function() {
 		fill_round_rect(context, 0, 0, 16, 16, 2);
 
 		// text
-		context.font = "9px 'Francois One'";
+		context.font = "9px 'Francois One',Arial";
 		context.fillStyle = 'rgba(255,255,255,0.9)';
 		var metrix = context.measureText(style.text);
 		var leftPos = parseInt((16 - metrix.width) / 2);
@@ -110,9 +110,15 @@ $(function() {
 				current_contest_id = Codeforces.get_contest_id_from_url(current_url);
 				current_problem_id = Codeforces.get_problem_id_from_url(current_url);
 				current_problem_key = current_contest_id + ',' + current_problem_id;
+
+				if (typeof (submissions_list[current_contest_id]) === 'undefined') {
+					return;
+				}
+
 				var submissions = submissions_list[current_contest_id].filter(function(submission) {
 					return submission.problem_id === current_problem_id;
 				});
+
 				try {
 					waited_request({
 						success : true,
@@ -123,6 +129,7 @@ $(function() {
 				} catch (e) {
 					waited_request = undefined;
 				}
+
 				waited_request = undefined;
 			}
 		}
@@ -133,22 +140,59 @@ $(function() {
 		if (!Codeforces.is_problem_page_url(current_url)) {
 			return;
 		}
+
+		if (typeof (sample_io_list[current_problem_key]) === 'undefined') {
+			return;
+		}
+
+		var places = [ 'page', 'selection' ];
+		var sample_input = sample_io_list[current_problem_key].sample_input;
+		var sample_output = sample_io_list[current_problem_key].sample_output;
+		var sample_io_count = sample_io_list[current_problem_key].sample_input.length;
+
 		chrome.contextMenus.create({
 			title : 'Copy All Sample Input to clipboard',
-			contexts : [ 'page', 'selection' ],
+			contexts : places,
 			onclick : function() {
-				var data = sample_io_list[current_problem_key].sample_input.join('\n');
+				var data = sample_input.join('\n');
 				copy_to_clipboard(data);
 			}
 		});
 		chrome.contextMenus.create({
 			title : 'Copy All Sample Output to clipboard',
-			contexts : [ 'page', 'selection' ],
+			contexts : places,
 			onclick : function() {
-				var data = sample_io_list[current_problem_key].sample_output.join('\n');
+				var data = sample_output.join('\n');
 				copy_to_clipboard(data);
 			}
 		});
+
+		for ( var i = 0; i < sample_io_count; ++i) {
+			(function(i) {
+				var test_case_id = chrome.contextMenus.create({
+					title : 'Test Case ' + (i + 1),
+					contexts : places
+				});
+				chrome.contextMenus.create({
+					title : 'Copy Input to clipboard',
+					contexts : places,
+					onclick : function() {
+						var data = sample_input[i];
+						copy_to_clipboard(data);
+					},
+					parentId : test_case_id
+				});
+				chrome.contextMenus.create({
+					title : 'Copy Output to clipboard',
+					contexts : places,
+					onclick : function() {
+						var data = sample_output[i];
+						copy_to_clipboard(data);
+					},
+					parentId : test_case_id
+				});
+			})(i);
+		}
 	}
 
 	/**
