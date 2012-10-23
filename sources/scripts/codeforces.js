@@ -3,8 +3,8 @@
 //  this library needs jQuery
 //
 (function(window, namespace, undefined) {
-	var REGEXP_PROBLEMSET_PROBLEM = /^([^:]+:\/\/[^\/]+)?\/problemset\/problem\/([0-9]+)\/([A-Za-z]+)\/?([\?#].*)?$/;
-	var REGEXP_CONTEST_PROBLEM = /^([^:]+:\/\/[^\/]+)?\/contest\/([0-9]+)\/problem\/([A-Za-z]+)\/?([\?#].*)?$/;
+	var REGEXP_PROBLEMSET_PROBLEM = /^([^:]+:\/\/[^\/]+)?\/problemset\/problem\/([0-9]+)\/([0A-Za-z]+)\/?([\?#].*)?$/;
+	var REGEXP_CONTEST_PROBLEM = /^([^:]+:\/\/[^\/]+)?\/contest\/([0-9]+)\/problem\/([0A-Za-z]+)\/?([\?#].*)?$/;
 	var CODEFORCES_HOST = 'http://www.codeforces.com';
 
 	if (/^https?:\/\/[^\.]*\.?codeforces\.(com|ru)/.test(location.href)) {
@@ -47,7 +47,7 @@
 		},
 
 		/**
-		 * StatusをIDに変換する
+		 * Status TextをIDに変換する
 		 * 
 		 * @param status_text
 		 * @returns
@@ -61,7 +61,9 @@
 					'Частичное', 'Ошибка представления данных', 'Решение зависло', 'Безопасность нарушена', 'Отказ тестирования',
 					'Подготовка входных данных не удалась', 'Попытка игнорирована', 'Выполняется' ];
 			for ( var i = 0; i < status_list.length; ++i) {
-				if (status_text.indexOf(status_list[i]) !== -1) {
+				if (status_text.indexOf('Pretests passed') !== -1) {
+					return 0;
+				} else if (status_text.indexOf(status_list[i]) !== -1) {
 					return i;
 				} else if (status_text.indexOf(status_list_russian[i]) !== -1) {
 					return i;
@@ -104,13 +106,19 @@
 				return false;
 			}
 
+			var problem_id = undefined;
 			if (REGEXP_PROBLEMSET_PROBLEM.test(url)) {
-				return url.match(REGEXP_PROBLEMSET_PROBLEM)[3].toUpperCase();
+				problem_id = url.match(REGEXP_PROBLEMSET_PROBLEM)[3].toUpperCase();
 			} else if (REGEXP_CONTEST_PROBLEM.test(url)) {
-				return url.match(REGEXP_CONTEST_PROBLEM)[3].toUpperCase();
+				problem_id = url.match(REGEXP_CONTEST_PROBLEM)[3].toUpperCase();
+			} else {
+				return false;
 			}
 
-			return false;
+			if (problem_id === '0') {
+				return 'A';
+			}
+			return problem_id;
 		},
 
 		/**

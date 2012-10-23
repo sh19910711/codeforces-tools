@@ -6,6 +6,7 @@ $(function() {
 		var current_problem_id; // 表示している問題のID
 		var current_submissions = [];
 		var current_url_prefix = 'http://www.codeforces.com';
+		var timeout_id = false; // 提出取得時タイムアウトしたとき用
 
 		set_html();
 		set_event();
@@ -18,7 +19,6 @@ $(function() {
 				set_event();
 
 				// 新しいデータが届いた
-				// TODO: implement
 				if (ret.success) {
 					ret.submissions.forEach(function(submission) {
 						current_submissions[submission.id] = submission;
@@ -28,6 +28,11 @@ $(function() {
 					current_contest_id = ret.contest_id;
 					current_problem_id = ret.problem_id;
 					current_url_prefix = ret.url_prefix;
+					clearTimeout(timeout_id);
+				} else {
+					timeout_id = setTimeout(function() {
+						status_text.text('Timeout.');
+					}, 1000);
 				}
 
 				generate_wait_submissions();
@@ -49,6 +54,11 @@ $(function() {
 				current_contest_id = ret.contest_id;
 				current_problem_id = ret.problem_id;
 				current_url_prefix = ret.url_prefix;
+				clearTimeout(timeout_id);
+			} else {
+				timeout_id = setTimeout(function() {
+					status_text.text('Timeout.');
+				}, 3000);
 			}
 			generate_wait_submissions();
 		});
@@ -82,7 +92,6 @@ $(function() {
 		function open_submission_page(contest_id, submission_id) {
 			// http://www.codeforces.com/contest/{contest_id}/submission/{submission_id}
 			var url = current_url_prefix + '/contest/' + current_contest_id + '/submission/' + submission_id;
-			console.log(current_url_prefix);
 			window.open(url);
 		}
 

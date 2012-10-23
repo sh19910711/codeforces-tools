@@ -195,6 +195,15 @@
 
 		test('正常なURLを与えて正しい値を返すことを確認する', function() {
 			var test_cases = [ {
+				url : 'http://www.codeforces.com/contest/135/problem/0/',
+				expect : 'A'
+			}, {
+				url : 'http://www.codeforces.com/contest/135/problem/0',
+				expect : 'A'
+			}, {
+				url : 'http://www.codeforces.com/contest/135/problem/0?B',
+				expect : 'A'
+			}, {
 				url : 'http://www.codeforces.com/contest/135/problem/A/',
 				expect : 'A'
 			}, {

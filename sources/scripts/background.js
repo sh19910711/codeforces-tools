@@ -48,6 +48,7 @@ $(function() {
 				text : '-'
 			};
 		}
+
 		var style = get_solved_style(solved_info_list[tab_id]);
 		var canvas = document.createElement('canvas');
 		var context = canvas.getContext('2d');
@@ -57,7 +58,7 @@ $(function() {
 		fill_round_rect(context, 0, 0, 16, 16, 2);
 
 		// text
-		context.font = "9px 'Francois One',Arial";
+		context.font = "9px 'Francois One'";
 		context.fillStyle = 'rgba(255,255,255,0.9)';
 		var metrix = context.measureText(style.text);
 		var leftPos = parseInt((16 - metrix.width) / 2);
@@ -114,7 +115,7 @@ $(function() {
 				current_problem_id = Codeforces.get_problem_id_from_url(current_url);
 				current_problem_key = current_contest_id + ',' + current_problem_id;
 
-				if (typeof (submissions_list[current_contest_id]) === 'undefined') {
+				if ((typeof (submissions_list[current_contest_id]) === 'undefined') || !(submissions_list instanceof Array)) {
 					return;
 				}
 
@@ -139,6 +140,9 @@ $(function() {
 		}
 	}
 
+	/**
+	 * コンテキストメニューを設定する
+	 */
 	function set_context_menu() {
 		chrome.contextMenus.removeAll();
 		if (!Codeforces.is_problem_page_url(current_url)) {
@@ -246,6 +250,9 @@ $(function() {
 			if (typeof (submissions) === 'undefined') {
 				return 2;
 			}
+			if (!(submissions instanceof Array)) {
+				return 2;
+			}
 			var cnt = 0;
 			var accepted = submissions.some(function(submission) {
 				if (submission.problem_id !== problem_id) {
@@ -261,7 +268,6 @@ $(function() {
 		})();
 
 		submissions_list[contest_id] = submissions;
-		// TODO: page actionなどデータの更新を待ってる人にお返事を出す
 		set_tab(tab_id);
 		send_response({
 			success : true
@@ -272,9 +278,13 @@ $(function() {
 	 * 提出状況を返す
 	 */
 	function get_submissions(info, send_response) {
-		if (typeof (submissions_list[current_contest_id]) === 'undefined') {
+		if ((typeof (submissions_list[current_contest_id]) === 'undefined') || !(submissions_list instanceof Array)
+				|| !(submissions_list[current_contest_id] instanceof Array)) {
 			// データが更新されるのを待つ
 			waited_request = send_response;
+			send_response({
+				success : false
+			});
 		} else {
 			// 現在の問題IDに一致するものだけを返す
 			var submissions = submissions_list[current_contest_id].filter(function(submission) {

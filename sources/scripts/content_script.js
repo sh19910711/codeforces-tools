@@ -6,12 +6,12 @@
 	 */
 	var count = 0;
 	(function retry() {
-		if (typeof (jQuery) == 'undefined') {
+		if (typeof (jQuery) == 'undefined' || typeof (Codeforces) == 'undefined') {
 			if (count++ < 5) {
 				setTimeout(retry, 250);
 			}
 		} else {
-			$(start);
+			start();
 		}
 	})();
 
@@ -21,7 +21,7 @@
 	function check_login() {
 		login_flag = false;
 		$('#header div.lang-chooser a').each(function() {
-			if ($(this).attr('href') === '/logout') {
+			if ($(this).text() === 'Logout') {
 				login_flag = true;
 			}
 		});
@@ -71,7 +71,23 @@
 				}
 			});
 		});
+	}
 
+	/**
+	 * 順位表のデータを取得する
+	 */
+	function get_standings_data(participant_id, problem_id, callback) {
+		var url = 'http://www.codeforces.com/data/standings';
+		$.ajax({
+			type : 'POST',
+			url : url,
+			dataType : 'json',
+			// data : 'participantId=755471&problemId=1939',
+			data : 'participantId=' + participant_id + '&problemId=' + problem_id,
+			success : function(ret) {
+				callback(ret);
+			}
+		});
 	}
 
 	/**
@@ -92,8 +108,4 @@
 			});
 		}
 	}
-
-	$(window).on('beforeunload', function() {
-		// TODO: ウィンドウが閉じられたときの処理
-	});
 })();
