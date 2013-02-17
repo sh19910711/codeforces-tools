@@ -273,10 +273,17 @@ $(function() {
 	 				cnt++;
 	 				return submission.status === Codeforces.STATUS_ACCEPTED;
 	 			});
+	 			var rejected = ! submissions.some(function(submission) {
+	 				if (submission.problem_id !== problem_id) {
+	 					return false;
+	 				}
+	 				cnt++;
+	 				return submission.status === Codeforces.STATUS_TESTING;
+	 			});
 	 			if (cnt == 0) {
 	 				return 2;
 	 			}
-	 			return accepted ? 0 : 1;
+	 			return accepted ? 0 : ( rejected ? 1 : 2 );
 	 		})();
 
 	 		submissions_list[contest_id] = submissions;
