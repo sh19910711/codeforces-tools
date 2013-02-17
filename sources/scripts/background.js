@@ -14,8 +14,6 @@ $(function() {
 	var waited_request = undefined;
 	var clipboard_buffer = undefined;
 
-	check_login(function() {});
-
 	(function() {
 		var model = Settings.get('codeforces_host');
 		if ( ! model )
@@ -27,6 +25,8 @@ $(function() {
 		if ( codeforces_host )
 			Codeforces.set_codeforces_host( codeforces_host );
 	})();
+
+	check_login(function() {});
 	/**
 	 * 角丸の矩形を描画する
 	 */

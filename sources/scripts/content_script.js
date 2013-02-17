@@ -70,6 +70,7 @@
 	 */
 	 function start() {
 	 	check_login(function(login_flag) {
+	 		console.log(login_flag);
 	 		if ( login_flag ) {
 	 			var url = location.href;
 	 			if (Codeforces.is_problem_page_url(url)) {

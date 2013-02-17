@@ -297,7 +297,7 @@
 		 		var login_flag = false;
 		 		ret = ret.replace(/href/ig, 'data-href').replace(/src/ig, 'data-src');
 		 		$('#header div.lang-chooser a', ret).each(function() {
-		 			if ($(this).text() === 'Logout') {
+		 			if ($(this).text() === 'Logout' || $(this).text() === 'Выйти') {
 		 				login_flag = true;
 		 				callback({
 		 					login: true
