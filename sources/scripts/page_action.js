@@ -32,6 +32,7 @@ $(function() {
 				} else {
 					timeout_id = setTimeout(function() {
 						status_text.text('Timeout.');
+						$('').append('<p>hoge</p>');
 					}, 1000);
 				}
 
@@ -58,6 +59,7 @@ $(function() {
 			} else {
 				timeout_id = setTimeout(function() {
 					status_text.text('Timeout.');
+					body.append('<p>The Codeforces\'s server might have been down. Please wait a moment and try again.<br>If you\'ve logged in codeforces.ru, codeforces.com or etc..., please see <a target="_blank" href="options.html">the settings page</a>.</p>');
 				}, 3000);
 			}
 			generate_wait_submissions();
@@ -72,7 +74,7 @@ $(function() {
 			body.empty();
 			body.append('<div id="status">Solved Status: <span class="text"></span></div>');
 			body
-					.append('<div id="footer">Codeforces Tools Version <span class="version"></span><br>(C) <a href="http://www.yomogimochi.com/">Hiroyuki Sano</a></div>');
+					.append('<div id="footer"><a target="_blank" href="options.html">Settings</a> - Codeforces Tools Version <span class="version"></span><br>(C) Copyright 2012-2013 Hiroyuki Sano</div>');
 			status_text = $('#status .text');
 			$.getJSON('manifest.json', function(ret) {
 				$('#footer>.version').text(ret.version);
