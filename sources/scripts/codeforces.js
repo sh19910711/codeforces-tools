@@ -294,6 +294,7 @@
 		 */
 		 check_login: function(callback) {
 		 	$.get(CODEFORCES_HOST, function(ret) {
+		 		var login_flag = false;
 		 		ret = ret.replace(/href/ig, 'data-href').replace(/src/ig, 'data-src');
 		 		$('#header div.lang-chooser a', ret).each(function() {
 		 			if ($(this).text() === 'Logout') {
