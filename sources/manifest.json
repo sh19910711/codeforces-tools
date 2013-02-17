@@ -3,7 +3,7 @@
 	"version": "0.0.6",
 	"manifest_version": 2,
 	"homepage_url": "https://chrome.google.com/webstore/detail/codeforces-tools/djhdjibchilkplcdkmkmjlefdngiaold",
-	"permissions": ["tabs", "contextMenus", "clipboardWrite", "notifications"],
+	"permissions": ["tabs", "contextMenus", "clipboardWrite", "notifications", "http://www.codeforces.com/*","http://www.codeforces.ru/*","http://codeforces.com/*","http://codeforces.ru/*"],
 	"description": "for Codeforces (Unofficial)",
 	"icons": {
 		"16": "images/icon_16.png",
@@ -13,7 +13,7 @@
 		"200": "images/icon_200.png"
 	},
 	"content_scripts": [{
-		"matches": ["*://www.codeforces.com/*","*://www.codeforces.ru/*","*://codeforces.com/*","*://codeforces.ru/*"],
+		"matches": ["http://www.codeforces.com/*","http://www.codeforces.ru/*","http://codeforces.com/*","http://codeforces.ru/*"],
 		"js": ["scripts/jquery.js", "scripts/content_script.js", "scripts/codeforces.js"]
 	}],
 	"background": {
@@ -23,5 +23,6 @@
 	    "default_icon": "images/icon_16.png",
 	    "default_title": "Codeforces Tool",
 	    "default_popup": "page_action.html"
-  	}
+  	},
+  	"options_page": "options.html"
 }
