@@ -6,7 +6,6 @@
 	"use strict";
 	var Setting = Backbone.Model.extend({
 		initialize: function() {
-			console.log('@Setting::init');
 		}
 	});
 	this[namespace] = Setting;

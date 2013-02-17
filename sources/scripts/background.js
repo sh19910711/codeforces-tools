@@ -1,5 +1,5 @@
 $(function() {
-	var login_flag;
+	var login_flag = false;
 	var current_tab_id = 0;
 	var current_url = '';
 	var current_url_prefix = '';
@@ -55,6 +55,11 @@ $(function() {
 	 				color : 'rgba(204,51,0,0.75)',
 	 				text : 'WA'
 	 			};
+	 		} else if ( type === 3 ) {
+		 		return {
+		 			color : 'rgba(102,102,102,0.75)',
+		 			text : '/'
+		 		};
 	 		}
 	 		return {
 	 			color : 'rgba(102,102,102,0.75)',
@@ -283,7 +288,7 @@ $(function() {
 	 			if (cnt == 0) {
 	 				return 2;
 	 			}
-	 			return accepted ? 0 : ( rejected ? 1 : 2 );
+	 			return accepted ? 0 : ( rejected ? 1 : 3 );
 	 		})();
 
 	 		submissions_list[contest_id] = submissions;

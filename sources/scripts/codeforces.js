@@ -205,7 +205,7 @@
 		 get_sample_output_from_html_text : function(html_text) {
 		 	html_text = do_scraping(html_text);
 		 	var res = $('div.sample-test>div.output>pre', html_text).map(function(i, html_element) {
-		 		return $.trim($(html_element).html().replace(/<br>/ig, '\n'));
+		 		return $.trim($(html_element).html().replace(/<br>/ig, '\n').replace(/&lt;/g, '<').replace(/&gt;/g, '>'));
 		 	});
 		 	return Array.prototype.slice.apply(res);
 		 },
@@ -249,7 +249,7 @@
 		 get_sample_input_from_html_text : function(html_text) {
 		 	html_text = do_scraping(html_text);
 		 	var res = $('div.sample-test>div.input>pre', html_text).map(function(i, html_element) {
-		 		return $.trim($(html_element).html().replace(/<br>/ig, '\n'));
+		 		return $.trim($(html_element).html().replace(/<br>/ig, '\n').replace(/&lt;/g, '<').replace(/&gt;/g, '>'));
 		 	});
 		 	return Array.prototype.slice.apply(res);
 		 },
