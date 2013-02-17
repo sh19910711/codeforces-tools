@@ -7,9 +7,11 @@
 	var REGEXP_CONTEST_PROBLEM = /^([^:]+:\/\/[^\/]+)?\/contest\/([0-9]+)\/problem\/([0A-Za-z]+)\/?([\?#].*)?$/;
 	var CODEFORCES_HOST = 'http://www.codeforces.com';
 
+/* あとで消す
 	if (/^https?:\/\/[^\.]*\.?codeforces\.(com|ru)/.test(location.href)) {
 		CODEFORCES_HOST = location.href.match(/^https?:\/\/[^\.]*\.?codeforces\.(com|ru)/)[0];
 	}
+*/
 
 	var Codeforces = {
 		STATUS_SHORT_NAME : [ 'AC', 'WA', 'WA', 'RE', 'TLE', 'MLE', 'CE', 'WA', 'WA', 'WA', 'PE', 'ILE', 'SV', 'DJ', 'IPF', 'SK', '?' ],
@@ -284,6 +286,13 @@
 					sample_input : sample_input
 				});
 			}
+		},
+
+		/**
+		 * Codeforcesのホスト名を設定する
+		 */
+		set_codeforces_host: function( hostname ) {
+			CODEFORCES_HOST = hostname;
 		}
 	};
 
