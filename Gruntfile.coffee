@@ -41,6 +41,19 @@ module.exports = (grunt) ->
           )
   })
 
+  # bower
+  _.extend(init_config, {
+    bower:
+      build:
+        options:
+          targetDir: './source/js/com/'
+          layout: 'byComponent'
+          install: true
+          verbose: true
+          cleanTargetDir: false
+          cleanBowerDir: true
+  })
+
   # copy
   _.extend(init_config, {
     copy:
@@ -89,6 +102,7 @@ module.exports = (grunt) ->
   grunt.registerTask(
     'build'
     [
+      'bower'
       'copy'
     ]
   )

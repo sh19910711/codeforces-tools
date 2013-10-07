@@ -1,0 +1,19 @@
+{
+  "name": "codeforces-tools",
+  "version": "0.0.6",
+  "homepage": "https://github.com/sh19910711/codeforces-tools",
+  "authors": [
+    "Hiroyuki Sano <sh19910711@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3"
+  }
+}
