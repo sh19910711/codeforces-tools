@@ -46,7 +46,7 @@ module.exports = (grunt) ->
     bower:
       build:
         options:
-          targetDir: './source/js/com/'
+          targetDir: './source/lib/com/'
           layout: 'byComponent'
           install: true
           verbose: true
@@ -67,25 +67,25 @@ module.exports = (grunt) ->
           {
             expand: true
             cwd: './source'
-            src: ['js/*.js']
+            src: ['lib/app/js/*.js']
             dest: 'dist/'
           }
           {
             expand: true
             cwd: './source'
-            src: ['css/*.css']
+            src: ['lib/app/css/*.css']
             dest: 'dist/'
           }
           {
             expand: true
             cwd: './source'
-            src: ['html/*.html']
+            src: ['lib/app/html/*.html']
             dest: 'dist/'
           }
           {
             expand: true
             cwd: './source'
-            src: ['img/*.png']
+            src: ['lib/app/img/*.png']
             dest: 'dist/'
           }
         ]
