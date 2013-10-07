@@ -60,9 +60,19 @@ module.exports = (grunt) ->
       build:
         files: [
           {
+            expand: true
             cwd: './source'
-            src: './source/manifest.json'
-            dest: './dist/manifest.json'
+            src: 'manifest.json'
+            dest: 'dist/'
+          }
+          {
+            expand: true
+            cwd: './source'
+            src: [
+              'lib/com/**/*.js'
+              'lib/com/**/*.css'
+            ],
+            dest: 'dist/'
           }
           {
             expand: true
