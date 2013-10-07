@@ -6,11 +6,11 @@
 	"permissions": ["tabs", "contextMenus", "clipboardWrite", "notifications", "http://www.codeforces.com/*","http://www.codeforces.ru/*","http://codeforces.com/*","http://codeforces.ru/*"],
 	"description": "for Codeforces (Unofficial)",
 	"icons": {
-		"16": "images/icon_16.png",
-		"48": "images/icon_48.png",
-		"64": "images/icon_64.png",
-		"128": "images/icon_128.png",
-		"200": "images/icon_200.png"
+		"16": "img/icon_16.png",
+		"48": "img/icon_48.png",
+		"64": "img/icon_64.png",
+		"128": "img/icon_128.png",
+		"200": "img/icon_200.png"
 	},
 	"content_scripts": [{
 		"matches": ["http://www.codeforces.com/*","http://www.codeforces.ru/*","http://codeforces.com/*","http://codeforces.ru/*"],
@@ -20,7 +20,7 @@
 		"page": "html/background.html"
 	},
 	"page_action": {
-	    "default_icon": "images/icon_16.png",
+	    "default_icon": "img/icon_16.png",
 	    "default_title": "Codeforces Tool",
 	    "default_popup": "html/page_action.html"
   	},
