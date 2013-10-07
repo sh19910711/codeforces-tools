@@ -17,12 +17,12 @@
 		"js": ["scripts/jquery.js", "scripts/content_script.js", "scripts/codeforces.js"]
 	}],
 	"background": {
-		"page": "background.html"
+		"page": "html/background.html"
 	},
 	"page_action": {
 	    "default_icon": "images/icon_16.png",
 	    "default_title": "Codeforces Tool",
-	    "default_popup": "page_action.html"
+	    "default_popup": "html/page_action.html"
   	},
-  	"options_page": "options.html"
+  	"options_page": "html/options.html"
 }
