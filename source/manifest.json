@@ -14,7 +14,7 @@
 	},
 	"content_scripts": [{
 		"matches": ["http://www.codeforces.com/*","http://www.codeforces.ru/*","http://codeforces.com/*","http://codeforces.ru/*"],
-		"js": ["scripts/jquery.js", "scripts/content_script.js", "scripts/codeforces.js"]
+		"js": ["js/jquery.js", "js/content_script.js", "js/codeforces.js"]
 	}],
 	"background": {
 		"page": "html/background.html"
