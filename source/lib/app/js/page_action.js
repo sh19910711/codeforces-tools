@@ -76,7 +76,7 @@ $(function() {
 			body
 					.append('<div id="footer"><a target="_blank" href="options.html">Settings</a> - Codeforces Tools Version <span class="version"></span><br>(C) Copyright 2012-2013 Hiroyuki Sano</div>');
 			status_text = $('#status .text');
-			$.getJSON('manifest.json', function(ret) {
+			$.getJSON('../../../manifest.json', function(ret) {
 				$('#footer>.version').text(ret.version);
 			});
 			status_text.text('Loading...');
