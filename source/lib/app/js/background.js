@@ -178,6 +178,19 @@ $(function() {
 	 	var sample_io_count = sample_io_list[current_problem_key].sample_input.length;
 
 	 	chrome.contextMenus.create({
+	 		title : 'Copy All Sample Input-Output to clipboard',
+	 		contexts : places,
+	 		onclick : function() {
+				var data = sample_io_count;
+				data += "\n";
+	 			data += sample_input.join('\nI***I\n');
+				data += "\nB*****B\n";
+	 			data += sample_output.join('\nO***O\n');
+				copy_to_clipboard(data);
+	 		}
+	 	});
+
+	 	chrome.contextMenus.create({
 	 		title : 'Copy All Sample Input to clipboard',
 	 		contexts : places,
 	 		onclick : function() {
@@ -194,6 +207,7 @@ $(function() {
 	 			copy_to_clipboard(data);
 	 		}
 	 	});
+
 
 	 	for ( var i = 0; i < sample_io_count; ++i) {
 	 		(function(i) {
