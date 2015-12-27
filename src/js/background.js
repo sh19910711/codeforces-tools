@@ -1,3 +1,9 @@
+"use strict";
+
+const $ = require('jquery');
+const Settings = require('./settings');
+const settings = new Settings;
+
 $(function() {
   "use strict";
 
@@ -18,9 +24,9 @@ $(function() {
 
   // get user options
   (function() {
-    var model = Settings.get('codeforces_host');
+    var model = settings.get('codeforces_host');
     if ( ! model )
-      model = Settings.create({
+      model = settings.create({
         id: 'codeforces_host',
         value: ''
       });
@@ -264,8 +270,8 @@ $(function() {
          this.setSampleIO(self.info, self.send_response);
         },
         'update settings': _=> {
-          Settings.fetch();
-          Codeforces.set_codeforces_host(Settings.get('codeforces_host').get('value'));
+          settings.fetch();
+          Codeforces.set_codeforces_host(settings.get('codeforces_host').get('value'));
         },
         'check login': _=> {
           this.checkLogin(self.send_response);

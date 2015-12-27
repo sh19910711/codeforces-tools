@@ -1,7 +1,7 @@
 (function() {
   "use strict";
 
-  window.BackgroundProxy = class BackgroundProxy {
+  module.exports = class BackgroundProxy {
     hello() {
       chrome.runtime.sendMessage({
         type: "hello"

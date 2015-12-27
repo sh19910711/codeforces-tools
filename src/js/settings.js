@@ -1,26 +1,19 @@
 // Settings
-// depends on Backbone.js and Underscore.js
+(function() {
+  'use strict';
+  const Backbone = require('backbone')
+  require('backbone.localstorage');
 
-// Model
-(function( namespace ) {
-  "use strict";
   var Setting = Backbone.Model.extend({
     initialize: function() {
     }
   });
-  this[namespace] = Setting;
-}).call(window, 'Setting');
 
-// Collection
-(function( namespace ) {
-  "use strict";
-  var Settings = Backbone.Collection.extend({
+  module.exports = Backbone.Collection.extend({
     model: Setting,
     initialize: function() {
       this.fetch();
     },
     localStorage: new Backbone.LocalStorage('settings')
   });
-  var settings = new Settings();
-  this[namespace] = settings;
 }).call(window, 'Settings');
