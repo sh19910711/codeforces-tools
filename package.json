@@ -4,15 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "grunt build",
+    "update": "bower update --save && npm update --save",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "grunt": "grunt",
+    "bower": "bower"
   },
   "author": "Hiroyuki Sano <sh19910711@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "underscore": "~1.5.2",
-    "grunt": "~0.4.1",
-    "grunt-contrib-uglify": "~0.2.4",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-bower-task": "~0.3.2"
+    "grunt": "~0.4.5",
+    "grunt-bower-task": "~0.4.0",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-copy": "~0.8.2",
+    "grunt-contrib-uglify": "~0.11.0",
+    "underscore": "~1.8.3"
   }
 }
