@@ -1,28 +1,34 @@
 {
-	"name": "Codeforces Tools",
-	"version": "0.0.6",
 	"manifest_version": 2,
-	"homepage_url": "https://chrome.google.com/webstore/detail/codeforces-tools/djhdjibchilkplcdkmkmjlefdngiaold",
-	"permissions": ["tabs", "contextMenus", "clipboardWrite", "notifications", "http://www.codeforces.com/*","http://www.codeforces.ru/*","http://codeforces.com/*","http://codeforces.ru/*"],
+
+	"name": "Codeforces Tools",
 	"description": "for Codeforces (Unofficial)",
+	"version": "0.0.6",
+	"homepage_url": "https://chrome.google.com/webstore/detail/codeforces-tools/djhdjibchilkplcdkmkmjlefdngiaold",
+
+	"permissions": ["tabs", "contextMenus", "clipboardWrite", "notifications", "http://www.codeforces.com/*","http://www.codeforces.ru/*","http://codeforces.com/*","http://codeforces.ru/*"],
+
 	"icons": {
 		"16": "lib/app/img/icon_16.png",
 		"48": "lib/app/img/icon_48.png",
 		"64": "lib/app/img/icon_64.png",
 		"128": "lib/app/img/icon_128.png",
 		"200": "lib/app/img/icon_200.png"
-	},
+	}
+  ,
 	"content_scripts": [{
 		"matches": ["http://www.codeforces.com/*","http://www.codeforces.ru/*","http://codeforces.com/*","http://codeforces.ru/*"],
-		"js": ["lib/com/jquery/js/jquery.js", "lib/app/js/content_script.js", "lib/app/js/codeforces.js"]
+		"js": ["lib/com/jquery/js/jquery.js", "lib/app/js/codeforces.js", "lib/app/js/content_script.js"]
 	}],
+
 	"background": {
 		"page": "lib/app/html/background.html"
 	},
+
 	"page_action": {
 	    "default_icon": "lib/app/img/icon_16.png",
 	    "default_title": "Codeforces Tool",
 	    "default_popup": "lib/app/html/page_action.html"
-  	},
-  	"options_page": "lib/app/html/options.html"
+  },
+  "options_page": "lib/app/html/options.html"
 }
