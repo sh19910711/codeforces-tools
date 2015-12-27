@@ -18,7 +18,7 @@
   ,
 	"content_scripts": [{
 		"matches": ["http://www.codeforces.com/*","http://www.codeforces.ru/*","http://codeforces.com/*","http://codeforces.ru/*"],
-		"js": ["lib/com/jquery/js/jquery.js", "lib/app/js/codeforces.js", "lib/app/js/content_script.js"]
+		"js": ["lib/app/js/background_proxy.js", "lib/app/js/content_script.js"]
 	}],
 
 	"background": {

@@ -1,4 +1,6 @@
 $(function() {
+  "use strict";
+
   var login_flag = false;
   var current_tab_id = 0;
   var current_url = '';
@@ -27,7 +29,6 @@ $(function() {
       Codeforces.set_codeforces_host( codeforces_host );
   })();
 
-  check_login(function() {});
   /**
    * 角丸の矩形を描画する
    */
@@ -99,24 +100,6 @@ $(function() {
       if (Codeforces.is_problem_page_url(url)) {
         set_page_action_icon_image(tab_id);
         chrome.pageAction.show(tab_id);
-      }
-    });
-  }
-
-  /**
-   * 現在選択されているタブのURLを取得する
-   */
-  function set_current_url(tab_id, callback) {
-    chrome.tabs.getSelected(function(tab) {
-      current_url = tab.url;
-      current_url_prefix = Utils.get_url_prefix(current_url);
-      if (Codeforces.is_problem_page_url(current_url)) {
-        current_contest_id = Codeforces.get_contest_id_from_url(current_url);
-        current_problem_id = Codeforces.get_problem_id_from_url(current_url);
-        current_problem_key = current_contest_id + ',' + current_problem_id;
-      }
-      if (callback instanceof Function) {
-        callback();
       }
     });
   }
@@ -239,18 +222,6 @@ $(function() {
   }
 
   /**
-   * タブが選択されたり更新されたときに実行される関数
-   */
-  function set_tab(tab_id) {
-    set_current_url(tab_id, function() {
-      current_tab_id = tab_id;
-      set_page_action_icon(tab_id);
-      update_waited_request();
-      set_context_menu(current_tab_id, current_url, current_problem_key, 0);
-    });
-  }
-
-  /**
    * タブが選択されたときのイベント
    */
   function after_tab_highlight(highlight_info) {
@@ -269,138 +240,158 @@ $(function() {
     }
   }
 
-  /**
-   * 提出状況を受け取る
-   */
-  function set_submissions(tab_id, info, send_response) {
-    var contest_id = info.contest_id;
-    var problem_id = info.problem_id;
-
-    Codeforces.get_submissions_with_contest_id(contest_id, function(ret) {
-      var submissions = ret.submissions;
-      solved_info_list[tab_id] = (function() {
-        if (typeof (submissions) === 'undefined') {
-          return 2;
-        }
-        if (!(submissions instanceof Array)) {
-          return 2;
-        }
-        var cnt = 0;
-        var accepted = submissions.some(function(submission) {
-          if (submission.problem_id !== problem_id) {
-            return false;
-          }
-          cnt++;
-          return submission.status === Codeforces.STATUS_ACCEPTED;
-        });
-        var rejected = ! submissions.some(function(submission) {
-          if (submission.problem_id !== problem_id) {
-            return false;
-          }
-          cnt++;
-          return submission.status === Codeforces.STATUS_TESTING;
-        });
-        if (cnt == 0) {
-          return 2;
-        }
-        return accepted ? 0 : ( rejected ? 1 : 3 );
-      })();
-
-      submissions_list[contest_id] = submissions;
-      set_tab(tab_id);
-      send_response({
-        success : true
-      });
-    });
-  }
-
-  /**
-   * 提出状況を返す
-   */
-  function get_submissions(info, send_response) {
-    if ((typeof (submissions_list[current_contest_id]) === 'undefined')
-        || !(submissions_list instanceof Array)
-        || !(submissions_list[current_contest_id] instanceof Array)) {
-       // データが更新されるのを待つ
-      waited_request = send_response;
-      send_response({
-        success : false
-      });
-    } else {
-      // 現在の問題IDに一致するものだけを返す
-      var submissions = submissions_list[current_contest_id].filter(function(submission) {
-        return submission.problem_id === current_problem_id;
-      });
-      send_response({
-        success : true,
-        submissions : submissions,
-        contest_id : current_contest_id,
-        problem_id : current_problem_id,
-        url_prefix : current_url_prefix
-      });
-    }
-  }
-
   function wait_submissions(tab_id, info, send_response) {
     waited_request = send_response;
   }
 
   /**
-   * サンプル入出力の設定
-   */
-  function set_sample_io(info, send_response) {
-    var problem_key = info.contest_id + ',' + info.problem_id;
-    var sample_input = info.sample_input;
-    var sample_output = info.sample_output;
-
-    sample_io_list[problem_key] = {
-      sample_input : sample_input,
-      sample_output : sample_output
-    };
-
-    send_response({
-      success : true
-    });
-  }
-
-  function check_login( callback ) {
-    if ( login_flag ) {
-      callback({
-        login: true
-      });
-      return;
-    }
-    Codeforces.check_login(function(ret) {
-      callback(ret);
-    });
-  }
-
-  /**
    * 通信を管理する関数
    */
-  function check_message(request, sender, send_response) {
-    var type = request.type;
-    var info = request.info;
-
-    if (type === 'set submissions') {
-      set_submissions(sender.tab.id, info, send_response);
-    } else if (type === 'get submissions') {
-      get_submissions(info, send_response);
-    } else if (type === 'wait submissions') {
-      wait_submissions(sender.tab.id, info, send_response);
-    } else if (type === 'set sample io') {
-      set_sample_io(info, send_response);
-    } else if (type === 'update settings') {
-      Settings.fetch();
-      Codeforces.set_codeforces_host(Settings.get('codeforces_host').get('value'));
-    } else if (type === 'check login') {
-      check_login(send_response);
-    } else if (type === 'hello') {
-      set_tab(sender.tab.id)
+  class Service {
+    constructor() {
+      const self = this;
+      self.services = {
+        'set submissions': _=> {
+          this.setSubmissions();
+        },
+        'get submissions': _=> {
+          this.getSubmissions();
+        },
+        'wait submissions': _=> {
+          this.waitSubmissions();
+        },
+        'set sample io': _=> {
+         this.setSampleIO(self.info, self.send_response);
+        },
+        'update settings': _=> {
+          Settings.fetch();
+          Codeforces.set_codeforces_host(Settings.get('codeforces_host').get('value'));
+        },
+        'check login': _=> {
+          this.checkLogin(self.send_response);
+        },
+        'hello': _=> {
+          this.setTab(self.sender.tab.id)
+        }
+      };
     }
 
-    return true;
+    setTab(tab_id) {
+      set_current_url(tab_id, function() {
+        current_tab_id = tab_id;
+        set_page_action_icon(tab_id);
+        update_waited_request();
+        set_context_menu(current_tab_id, current_url, current_problem_key, 0);
+      });
+    }
+
+    setSampleIO(info, send_response) {
+      var problem_key = info.contest_id + ',' + info.problem_id;
+      var sample_input = info.sample_input;
+      var sample_output = info.sample_output;
+
+      sample_io_list[problem_key] = {
+        sample_input : sample_input,
+        sample_output : sample_output
+      };
+
+      send_response({
+        success : true
+      });
+    }
+
+    checkLogin( callback ) {
+      if ( login_flag ) {
+        callback({
+          login: true
+        });
+        return;
+      }
+      Codeforces.check_login(function(ret) {
+        callback(ret);
+      });
+    }
+
+    setSubmissions() {
+      const contest_id = this.request.info.contest_id;
+      const problem_id = this.request.info.problem_id;
+
+      Codeforces.get_submissions_with_contest_id(contest_id, function(ret) {
+        var submissions = ret.submissions;
+        solved_info_list[tab_id] = (function() {
+          if (typeof (submissions) === 'undefined') {
+            return 2;
+          }
+          if (!(submissions instanceof Array)) {
+            return 2;
+          }
+          var cnt = 0;
+          var accepted = submissions.some(function(submission) {
+            if (submission.problem_id !== problem_id) {
+              return false;
+            }
+            cnt++;
+            return submission.status === Codeforces.STATUS_ACCEPTED;
+          });
+          var rejected = ! submissions.some(function(submission) {
+            if (submission.problem_id !== problem_id) {
+              return false;
+            }
+            cnt++;
+            return submission.status === Codeforces.STATUS_TESTING;
+          });
+          if (cnt == 0) {
+            return 2;
+          }
+          return accepted ? 0 : ( rejected ? 1 : 3 );
+        })();
+
+        submissions_list[contest_id] = submissions;
+        set_tab(tab_id);
+        send_response({
+          success : true
+        });
+      });
+    }
+
+    getSubmissions() {
+      if ((typeof (submissions_list[current_contest_id]) === 'undefined')
+          || !(submissions_list instanceof Array)
+          || !(submissions_list[current_contest_id] instanceof Array)) {
+         // データが更新されるのを待つ
+        waited_request = send_response;
+        send_response({
+          success : false
+        });
+      } else {
+        // 現在の問題IDに一致するものだけを返す
+        var submissions = submissions_list[current_contest_id].filter(function(submission) {
+          return submission.problem_id === current_problem_id;
+        });
+        send_response({
+          success : true,
+          submissions : submissions,
+          contest_id : current_contest_id,
+          problem_id : current_problem_id,
+          url_prefix : current_url_prefix
+        });
+      }
+    }
+
+    checkMessages(request, sender, sendResponse) {
+      if (typeof this.services[request.type] === 'function') {
+        this.request = request;
+        this.info = request.info;
+        this.sender = sender;
+        this.tab = this.sender.tab;
+        this.send_response = sendResponse;
+        this.services[request.type].call(this);
+        return true;
+      }
+      return false;
+    }
   }
+  const service = new Service;
 
   function copy_to_clipboard(data) {
     $('#clipboard_buffer').empty().text(data);
@@ -416,6 +407,6 @@ $(function() {
     clipboard_buffer = $('#clipboard_buffer');
     chrome.tabs.onHighlighted.addListener(after_tab_highlight);
     chrome.tabs.onUpdated.addListener(after_tab_updated);
-    chrome.runtime.onMessage.addListener(check_message);
+    chrome.runtime.onMessage.addListener(service.checkMessage);
   });
 });

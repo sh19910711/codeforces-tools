@@ -1,13 +1,13 @@
 //
 // Codeforces Library
-//  this library needs jQuery
+// This library requires jQuery.
 //
 (function(window, namespace, undefined) {
-	var REGEXP_PROBLEMSET_PROBLEM = /^([^:]+:\/\/[^\/]+)?\/problemset\/problem\/([0-9]+)\/([0A-Za-z]+)\/?([\?#].*)?$/;
-	var REGEXP_CONTEST_PROBLEM = /^([^:]+:\/\/[^\/]+)?\/contest\/([0-9]+)\/problem\/([0A-Za-z]+)\/?([\?#].*)?$/;
-	var CODEFORCES_HOST = 'http://www.codeforces.com';
+	const REGEXP_PROBLEMSET_PROBLEM = /^([^:]+:\/\/[^\/]+)?\/problemset\/problem\/([0-9]+)\/([0A-Za-z]+)\/?([\?#].*)?$/;
+	const REGEXP_CONTEST_PROBLEM = /^([^:]+:\/\/[^\/]+)?\/contest\/([0-9]+)\/problem\/([0A-Za-z]+)\/?([\?#].*)?$/;
+	const CODEFORCES_HOST = 'http://www.codeforces.com';
 
-	var Codeforces = {
+	const Codeforces = {
 		STATUS_SHORT_NAME : [ 'AC', 'WA', 'WA', 'RE', 'TLE', 'MLE', 'CE', 'WA', 'WA', 'WA', 'PE', 'ILE', 'SV', 'DJ', 'IPF', 'SK', '?' ],
 		/*
 		 * remains color 'Runtime error', 'Time limit exceeded', 'Memory limit
@@ -368,5 +368,5 @@
 	 	return html_text.replace(/ href="/ig, ' data-href="').replace(/ src="/ig, ' data-src="');
 	 }
 
-	 window[namespace] = Codeforces;
-	})(this, 'Codeforces');
+	 window.Codeforces = Codeforces;
+	})(this);
