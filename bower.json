@@ -14,14 +14,13 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.0.3",
-    "backbone": "~1.0.0",
-    "backbone.localStorage": "~1.1.7",
-    "underscore": "~1.5.2"
+    "jquery": "~2.1.4",
+    "backbone": "~1.2.3",
+    "backbone.localStorage": "~1.1.16"
   },
   "exportsOverride": {
     "jquery": {
-      "js": "jquery.js"
+      "js": "dist/jquery.js"
     },
     "underscore": {
       "js": "underscore.js"
